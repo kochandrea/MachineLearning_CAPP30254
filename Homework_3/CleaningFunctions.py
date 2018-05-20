@@ -86,12 +86,14 @@ def discretize(df, column_name, num_bins, want_quantile):
 	Inputs:
 		- df:  dataframe
 		- column_name:  (str) column name for column to discretize
+		- num_bins: (int) number of bins/quantiles
+		- want_quantile: (bool) use pd.qcut() if True
 	Output:
 		- df:  updated dataframe with column of discretized results
 	'''
-	new_col = column_name + ' - Discretized'
+	bin_array = list(range(1,(num_bins+1)))
 	if want_quantile:
-		df[new_col] = pd.qcut(df[column_name], num_bins)
+		df[column_name] = pd.qcut(df[column_name], q=num_bins, labels=bin_array)
 	else:
-		df[new_col] = pd.cut(df[column_name], num_bins)
+		df[column_name] = pd.cut(df[column_name], bins=num_bins, labels=bin_array)
 	return df

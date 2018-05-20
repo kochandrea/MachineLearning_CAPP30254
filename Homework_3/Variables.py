@@ -1,16 +1,18 @@
-ALREADY_DUMMY_VARIABLES = ['school_charter', 
+DUMMY_VARIABLES_T_F = ['school_charter', 
 'school_magnet', 
 'school_year_round', 
 'school_nlns', 
 'school_kipp', 
 'school_charter_ready_promise', 
 'teacher_teach_for_america',
-'teacher_ny_teaching_fellow', 
-'fulfillment_labor_materials', 
+'teacher_ny_teaching_fellow',  
 'eligible_double_your_impact_match',
 'eligible_almost_home_match']
 
-TO_BE_DUMMYTIZED_VARIABLES = ['school_city', 
+
+DUMMY_VARIABLES_NOT_T_F = ['fulfillment_labor_materials']
+
+CATEGORICAL_VARIABLES = ['school_city', 
 'school_state', 
 'school_zip', 
 'school_metro',
@@ -25,7 +27,7 @@ TO_BE_DUMMYTIZED_VARIABLES = ['school_city',
 'poverty_level', 
 'grade_level']
 
-TO_BE_DISCRETIZED_VARIABLES = ['total_price_excluding_optional_support', 
+CONTINUOUS_VARIABLES = ['total_price_excluding_optional_support', 
 'total_price_including_optional_support',
 'students_reached']
 
