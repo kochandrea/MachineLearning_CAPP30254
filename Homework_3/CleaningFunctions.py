@@ -46,13 +46,20 @@ def zscore_remove_outlier(df, attribute):
 	return df
 
 
-def dummytize(df):
+def change_to_1_0(df):
 	for col in df.columns:
 		if ((list(df[col].unique()) == ['f','t']) 
 			or (list(df[col].unique()) == ['t','f'])):
 			df[col] = df[col].apply(lambda x: 1 if x=='t' else 0)
 	return df
 
+
+def dummytize(df, variables_list):
+    for var in variables_list:
+        dummy_frame = pd.get_dummies(df[var])
+        df = pd.concat([df, dummy_frame], axis=1, join_axes=[df.index])
+    return df
+    
 
 def has_na(df):
 	'''

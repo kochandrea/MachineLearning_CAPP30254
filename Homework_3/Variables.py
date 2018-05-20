@@ -38,3 +38,7 @@ ID_VARIABLES = ['teacher_acctid',
 GEO_VARIABLES = ['school_latitude', 
 'school_longitude']
 
+TARGET_VARIABLES = ['fully_funded']
+
+IDX = ['projectid']
+
