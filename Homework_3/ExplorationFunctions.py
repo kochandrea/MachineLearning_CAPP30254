@@ -7,6 +7,39 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 import graphviz 
 import seaborn as sns
+import plotly.plotly as py
+import plotly.graph_objs as go
+from plotly import __version__
+from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
+init_notebook_mode(connected=True)
+
+
+def donut_plot(df, column):
+    vals = list(df.groupby(column)['fully_funded'].value_counts())
+    keys = list(df.groupby(column)['fully_funded'].value_counts().keys())
+    fig = {"data": [{"values": vals,
+                     "labels": keys,
+                     "domain": {"x": [0, .48]},
+                     "hoverinfo":"label+percent",
+                     "hole": .4,
+                     "type": "pie"}],
+           "layout": {"title":"Percent Funded(1) and Not Funded(0) by {}".format(column)}
+          }
+    iplot(fig)
+
+
+def stylistic_pie_chart(df, column):
+    vals = list(df.groupby(column)['fully_funded'].value_counts())
+    keys = list(df.groupby(column)['fully_funded'].value_counts().keys())
+    colors = ['#FEBFB3', '#E1396C', '#96D38C', '#D0F9B1']
+
+    trace = go.Pie(labels=keys, values=vals,
+                   hoverinfo='label+percent', textinfo='value',
+                   textfont=dict(size=20),
+                   marker=dict(colors=colors,
+                               line=dict(color='#000000', width=2)))
+
+    iplot([trace], filename='styled_pie_chart')
 
 
 def scatter_plot(df, x, y):
@@ -18,6 +51,7 @@ def scatter_plot(df, x, y):
 		- x: (str) attribute name
 		- y: (str) attribute name
 	'''
+	plt.figure(figsize=(12,9))
 	plt.scatter(df[x], df[y])
 	plt.title(y+" "+x)
 	plt.xlabel(x) 
@@ -40,17 +74,19 @@ def histogram_plot(df, attribute_name):
 	plt.show()
 
 
-def correlation_heatmap(df):
-	'''
-	Create correlation heatmap of data.
-
-	Input:
-		- df:  dataframe
-	'''
+def heatmap_correlation(df):
 	corr = df.corr()
-	sns.heatmap(corr, 
-				xticklabels=corr.columns.values,
-				yticklabels=corr.columns.values)
+	plt.subplots(figsize=(20,15))
+	mask = np.zeros_like(corr)
+	mask[np.triu_indices_from(mask)] = True
+	with sns.axes_style("white"):
+		ax = sns.heatmap(corr, 
+						 vmax=0.3,
+						 mask=mask, 
+						 square=True, 
+						 linewidths=.5, 
+						 annot=True, 
+						 cmap="YlGnBu")
 
 
 def find_most_funded(df, var_of_interest, groupby_var, top_n):
@@ -58,32 +94,6 @@ def find_most_funded(df, var_of_interest, groupby_var, top_n):
 	Counts of top n most funded -- MAX n is 10
 	'''
 	return df.groupby(groupby_var)[var_of_interest].value_counts().nlargest(top_n)
-
-
-
-def plot_pie_chart_top_n_funded(df, var_of_interest, groupby_var, top_n=""):
-	if top_n != "":
-		top_n_funded = find_most_funded(df, var_of_interest, groupby_var, top_n)
-		sizes = list(top_n_funded)
-		idx = list(top_n_funded.index)
-		labels = []
-		for tup in idx:
-			labels.append(tup[1])
-
-		possible_colors = ['#a8e6cf', '#dcedc1', '#ffd3b6', '#ffaaa5', 
-							'#ff8b94', '#ffffba', '#a2798f',
-							'#d7c6cf','#8caba8','#ebdada']
-
-		colors = possible_colors[:top_n]
-		explode = [0]*top_n 
-
-		plt.pie(sizes, explode=explode, labels=labels, colors=colors,
-			autopct='%1.1f%%', shadow=False, startangle=140)
-		plt.title('Fully_funded by ' + str(var_of_interest) + ' : split of top '+ str(top_n))
-		plt.axis('equal')
-		plt.show()
-
-
 
 
 def mean_Y_by_X(df, X, Y):
@@ -102,7 +112,35 @@ def mean_Y_by_X(df, X, Y):
 	plt.ylabel(Y)
 	plt.xlabel(X)
 	plt.title('Mean '+Y+' by '+X)
+	plt.tight_layout()
 	plt.show()
 
+def graph_mean_over_time(df1, df2, df3, X, Y):
+    mean_df1 = df1.groupby(X).mean()
+    mean_df2 = df2.groupby(X).mean()
+    mean_df3 = df3.groupby(X).mean()
+
+    x1 = list(mean_df1.index.values)
+    y1 = list(mean_df1[Y].values)
+    
+    x2 = list(mean_df2.index.values)
+    y2 = list(mean_df2[Y].values)
+    
+    x3 = list(mean_df3.index.values)
+    y3 = list(mean_df3[Y].values)
+    
+    plt.plot(x1, y1)
+    plt.title('Mean '+Y+' by '+X)
+    plt.ylabel(Y)
+    
+    plt.plot(x2, y2)
+    plt.title('Mean '+Y+' by '+X)
+    plt.ylabel(Y)
+
+    plt.plot(x3, y3)
+    plt.title('Mean '+Y+' by '+X)
+    plt.ylabel(Y)
+    
+    plt.show()
 
 
