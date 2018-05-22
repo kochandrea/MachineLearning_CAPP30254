@@ -30,7 +30,7 @@ from sklearn.metrics import precision_recall_curve
 '''
 FUNCTIONS
 '''
-def create_temporal_split_dfs(df, features, target_var, num):
+def temporal_splitter(df, features, target_var, num):
     '''
     features = list of features
     target = target variable
@@ -67,7 +67,6 @@ def create_temporal_split_dfs(df, features, target_var, num):
     
     y_test = y_test[target_var]
     return x_train, x_test, y_train, y_test
-
 
 
 
@@ -234,13 +233,16 @@ def get_subsets(l):
     return subsets
 
 def clf_loop(models_to_run, clfs, grid, X_train, X_test, y_train, y_test):
-    """Runs the loop using models_to_run, clfs, gridm and the data
-    """
+    '''
+    Runs the loop using models_to_run, clfs, gridm and the data
+    '''
     results_df =  pd.DataFrame(columns=('model_type','clf', 'parameters', 'auc-roc', 'baseline',
                                         'p_at_1', 'p_at_2', 'p_at_5', 'p_at_10', 'p_at_20',
                                         'p_at_30', 'p_at_50',
                                         'r_at_1', 'r_at_2', 'r_at_5', 'r_at_10', 'r_at_20',
-                                        'r_at_30', 'r_at_50'))
+                                        'r_at_30', 'r_at_50'
+                                        'f_at_1', 'f_at_2', 'f_at_5', 'f_at_10', 'f_at_20',
+                                        'f_at_30'))
                                         
     for n in range(1, 2):
         for index,clf in enumerate([clfs[x] for x in models_to_run]):
@@ -268,7 +270,13 @@ def clf_loop(models_to_run, clfs, grid, X_train, X_test, y_train, y_test):
                                                        recall_at_k(y_test_sorted,y_pred_probs_sorted, 10.0),
                                                        recall_at_k(y_test_sorted,y_pred_probs_sorted, 20.0),
                                                        recall_at_k(y_test_sorted,y_pred_probs_sorted, 30.0),
-                                                       recall_at_k(y_test_sorted,y_pred_probs_sorted, 50.0)]
+                                                       recall_at_k(y_test_sorted,y_pred_probs_sorted, 50.0),
+                                                       F_score_at_k(y_test_sorted,y_pred_probs_sorted, 1.0),
+                                                       F_score_at_k(y_test_sorted,y_pred_probs_sorted, 2.0),
+                                                       F_score_at_k(y_test_sorted,y_pred_probs_sorted, 5.0),
+                                                       F_score_at_k(y_test_sorted,y_pred_probs_sorted, 10.0),
+                                                       F_score_at_k(y_test_sorted,y_pred_probs_sorted, 20.0),
+                                                       F_score_at_k(y_test_sorted,y_pred_probs_sorted, 30.0)]
                     plot_precision_recall_n(y_test,y_pred_probs,clf)
                 except IndexError as e:
                     print('Error:',e)
