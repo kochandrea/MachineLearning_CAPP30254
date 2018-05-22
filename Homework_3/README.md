@@ -1,11 +1,11 @@
 NOTEBOOKS:
 
-Pipeline.ipynb:
-- Contains classifiers pipeline and dataframes of evaluation metrics.
+-	Pipeline.ipynb:
+	-	Contains classifiers pipeline and dataframes of evaluation metrics.
 
 
-Cleaning & Exploration.ipynb:
-- Contains cleaning and exploration of Kaggle data.
+-	Cleaning & Exploration.ipynb:
+	-	Contains cleaning and exploration of Kaggle data.
 
 
 FILES:
@@ -16,15 +16,15 @@ FILES:
 	-	Stores dataframes as global variables
 
 
-Variables.py:
-- Stores lists of dataframe attribues as global variables, sorted by type of variable (eg. continuous, categorical)
+-	Variables.py:
+	-	Stores lists of dataframe attribues as global variables, sorted by type of variable (eg. continuous, categorical)
 
 
-ExplorationFunctions.py:
-- Contains functions used to clean and explore the data
-- Contains really cool donut and stylized pie plots which can only be viewed when in jupyter notebook
+-	ExplorationFunctions.py:
+	-	Contains functions used to clean and explore the data
+	-	Contains really cool donut and stylized pie plots which can only be viewed when in jupyter notebook
 
 
-PipelineFunctions.py:
-- Contains functions for evaluation metrics, classifier loop, and function for creating temporal train/test splits of data
-- With more time, would format the temporal_splitter to employ datetime module
+-	PipelineFunctions.py:
+	-	Contains functions for evaluation metrics, classifier loop, and function for creating temporal train/test splits of data
+	-	With more time, would format the temporal_splitter to employ datetime module
