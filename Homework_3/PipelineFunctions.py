@@ -294,6 +294,12 @@ def go_function(X_train, X_test, y_train, y_test):
     # define models to run
     models_to_run=['RF','DT','KNN', 'AB', 'LR', 'NB', 'BAGGING']
 
+    #change output display in pandas
+    pd.set_option('display.height', 1000)
+    pd.set_option('display.max_rows', 500)
+    pd.set_option('display.max_columns', 500)
+    pd.set_option('display.width', 1000)
+
     # call clf_loop and store results in results_df
     results_df = clf_loop(models_to_run, clfs,grid, X_train, X_test, y_train, y_test)
     return results_df
