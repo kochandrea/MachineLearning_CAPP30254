@@ -68,9 +68,27 @@ def create_temporal_split_dfs(df, features, target_var, num):
     y_test = y_test[target_var]
     return x_train, x_test, y_train, y_test
 
+
+
+
 '''
 Below adapted from: https://github.com/rayidghani/magicloops/blob/master/simpleloop.py
 '''
+
+def F_score_at_k(y_true, y_scores, k):
+    y_scores, y_true = joint_sort_descending(np.array(y_scores), np.array(y_true))
+    preds_at_k = np.asarray(generate_binary_at_k(y_scores, k))
+    precision = precision_score(y_true, preds_at_k, labels=None)
+
+    y_scores_sorted, y_true_sorted = joint_sort_descending(np.array(y_scores), np.array(y_true))
+    preds_at_k = generate_binary_at_k(y_scores_sorted, k)
+    recall = recall_score(y_true_sorted, preds_at_k)
+
+    F_score = 2*((precision*recall)/(precision+recall))
+
+    return F_score
+
+
 def define_clfs_params(grid_size):
     """Define defaults for different classifiers.
     Define three types of grids:
