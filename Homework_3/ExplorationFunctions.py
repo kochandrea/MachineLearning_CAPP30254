@@ -14,6 +14,17 @@ from plotly.offline import download_plotlyjs, init_notebook_mode, plot, iplot
 init_notebook_mode(connected=True)
 
 
+def basic_pie_chart(df, column): 
+    vals = list(df.groupby(column)['fully_funded'].value_counts())
+    keys = list(df.groupby(column)['fully_funded'].value_counts().keys())
+    patches, texts = plt.pie(vals, startangle=90)
+    plt.legend(patches, keys, loc="best")
+    plt.axis('equal')
+    plt.tight_layout()
+    plt.title("Percent Funded(1) and Not Funded(0) by {}".format(column))
+    plt.show()
+
+
 def donut_plot(df, column):
     vals = list(df.groupby(column)['fully_funded'].value_counts())
     keys = list(df.groupby(column)['fully_funded'].value_counts().keys())
